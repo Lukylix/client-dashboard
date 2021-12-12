@@ -1,0 +1,6 @@
+@import "./scss/utlis/";
+.App {
+	display: grid;
+	grid-template: auto / 2fr 1fr;
+	gap: 20px;
+}

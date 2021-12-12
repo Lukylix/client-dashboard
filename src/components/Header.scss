@@ -1,0 +1,11 @@
+@import "../scss/utlis";
+header {
+	display: flex;
+	align-items: center;
+	height: 80px;
+	background-color: $darker-grey;
+	color: white;
+	h1 {
+		margin-left: 20px;
+	}
+}

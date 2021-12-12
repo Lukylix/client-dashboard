@@ -1,0 +1,6 @@
+@import "../scss/utlis";
+.Ram-header {
+	display: grid;
+	grid-template: auto / repeat(3, 1fr);
+	text-align: center;
+}
