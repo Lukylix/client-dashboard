@@ -12,16 +12,20 @@ import {
 	Filler,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import { getReadableSize } from "../utils/convertion";
+
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 export const options = {
 	responsive: true,
 	maintainAspectRatio: true,
-	tension: 0.4,
+	tension: 0.5,
 	scales: {
 		y: {
 			suggestedMin: 0,
-			suggestedMax: 100,
+			ticks: {
+				callback: getReadableSize,
+			},
 		},
 	},
 	animation: {
@@ -41,44 +45,48 @@ export const options = {
 	},
 };
 
-const CpuChart = ({ socket }) => {
-	const [data, setData] = useState([]);
-	// 1. socket.emit('subscribe'listen for a cpu event and update the state
+const Network = ({ socket }) => {
+	const [networkData, setNetworkData] = useState({ rx_sec: [], tx_sec: [] });
 
 	useEffect(() => {
-		socket.on("cpuBase", (cpuPercents) => {
-			setData(cpuPercents);
-		});
-		socket.on("cpu", (cpuPercent) => {
-			setData((currentData) => {
-				if (currentData.length > 59) currentData.shift();
-				return [...currentData, cpuPercent];
+		socket.on("network", (data) => {
+			setNetworkData((currentData) => {
+				if (currentData?.rx_sec.length > 29) currentData.rx_sec.shift();
+				currentData.rx_sec.push(data[0].rx_sec);
+				if (currentData?.tx_sec.length > 29) currentData.tx_sec.shift();
+				currentData.tx_sec.push(data[0].tx_sec);
+				return { ...currentData };
 			});
 		});
-		socket.emit("subscribe", "cpu");
+
+		socket.emit("subscribe", "network");
 		// eslint-disable-next-line
 	}, []);
 
 	const lineData = {
-		labels: data.map((val, index) => `${60 - index}s`),
+		labels: networkData?.tx_sec.map((val, index) => `${networkData?.tx_sec.length - index}s`),
 		datasets: [
 			{
-				label: "cpu usage",
-				data: data,
-				fill: {
-					target: "origin",
-					above: "rgb(42, 171, 107)",
-				},
+				label: "download",
+				data: networkData.rx_sec,
+
 				borderColor: "rgb(32, 130, 81)",
 				backgroundColor: "rgb(42, 171, 107)",
 			},
+			{
+				label: "upload",
+				data: networkData.tx_sec,
+
+				borderColor: "rgb(255,133,71)",
+				backgroundColor: "rgb(255,133,71)",
+			},
 		],
 	};
+
 	return (
-		<Card title="Cpu usage">
+		<Card title="Network">
 			<Line options={options} data={lineData} />
 		</Card>
 	);
 };
-
-export default CpuChart;
+export default Network;

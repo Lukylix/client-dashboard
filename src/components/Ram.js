@@ -2,15 +2,7 @@ import "./Ram.scss";
 import Card from "./Card";
 import { useEffect, useState } from "react";
 import ProgressBar from "./ProgressBar";
-
-const getReadableSize = (bytes = 0) => {
-	var sizes = [" Bytes", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB"];
-
-	for (var i = 1; i < sizes.length; i++) {
-		if (bytes < Math.pow(1024, i)) return Math.round((bytes / Math.pow(1024, i - 1)) * 100) / 100 + sizes[i - 1];
-	}
-	return bytes;
-};
+import { getReadableSize } from "../utils/convertion";
 
 const Ram = ({ socket }) => {
 	const [ramInfo, setRamInfo] = useState({});
@@ -36,7 +28,7 @@ const Ram = ({ socket }) => {
 				</div>
 			</div>
 			<p style={{ textAlign: "center" }}>{`${((ramInfo.active / ramInfo.total) * 100).toFixed(2)} %`}</p>
-			<ProgressBar percent={((ramInfo.active / ramInfo.total) * 100).toFixed(2)} />
+			<ProgressBar rounded percent={((ramInfo.active / ramInfo.total) * 100).toFixed(2)} />
 		</Card>
 	);
 };

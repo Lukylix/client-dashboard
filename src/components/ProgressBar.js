@@ -1,9 +1,9 @@
 import "./ProgressBar.scss";
 
-const ProgressBar = ({ percent }) => {
+const ProgressBar = ({ percent, rounded = false, height = "20px" }) => {
 	return (
-		<div className="ProgressBar">
-			<div style={{ width: `${percent}%` }}></div>
+		<div className="ProgressBar" style={{ borderRadius: rounded ? "10px" : "0" }}>
+			<div style={{ width: `${percent}%`, height, borderRadius: rounded ? "10px" : "0" }}></div>
 		</div>
 	);
 };

@@ -1,12 +1,11 @@
 @import "../scss/utlis";
 
 .ProgressBar {
+	width: 100%;
 	margin-top: 10px;
-	border-radius: 10px;
 	background-color: $light-grey;
+	overflow: hidden;
 	div {
-		height: 20px;
 		background-color: $green;
-		border-radius: 10px;
 	}
 }

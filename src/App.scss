@@ -2,5 +2,10 @@
 .App {
 	display: grid;
 	grid-template: auto / 2fr 1fr;
-	gap: 20px;
+}
+
+@media screen and (max-width: 1024px) {
+	.App {
+		grid-template: auto / 1fr;
+	}
 }

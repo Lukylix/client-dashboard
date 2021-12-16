@@ -1,0 +1,14 @@
+@import "../scss/utlis/";
+.Disk-container {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	text-align: center;
+	h3 {
+		background-color: $light-grey;
+		margin-bottom: 20px;
+	}
+	.ProgressBar {
+		grid-column: 1 / -1;
+		margin-bottom: 20px;
+	}
+}
