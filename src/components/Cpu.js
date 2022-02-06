@@ -42,7 +42,7 @@ export const options = {
 		},
 		title: {
 			display: true,
-			text: "CPU usage Line Chart",
+			text: "CPU usage",
 		},
 	},
 };
@@ -88,6 +88,13 @@ const CpuChart = ({ socket }) => {
 	const [cpuPercents, setCpuPercents] = useState([]);
 	const [cpus, setCpus] = useState([]);
 	const [cpuInfo, setCpuInfo] = useState({});
+	const [showProcesses, setShowProcesses] = useState(false);
+
+	function toggleShowProcesses() {
+		if (!showProcesses) socket.emit("subscribe", "cpuInfo");
+		if (showProcesses) socket.emit("unsubscribe", "cpuInfo");
+		setShowProcesses(!showProcesses);
+	}
 
 	useEffect(() => {
 		socket.on("cpuBase", (cpuPercents) => {
@@ -138,62 +145,69 @@ const CpuChart = ({ socket }) => {
 					<CpuBar key={index} num={index + 1} percent={cpu} />
 				))}
 			</div>
-			<h2>Cpu info {cpuInfo.manufacturer + " " + cpuInfo.brand}</h2>
-			<div className="Cpu-info-container">
-				<div>
-					<h3>Frequency avg</h3>
-					<p>{cpuInfo.avg}GHz</p>
-				</div>
-				<div>
-					<h3>Frequency min</h3>
-					<p>{cpuInfo.min}GHz</p>
-				</div>
-				<div>
-					<h3>Frequency max</h3>
-					<p>{cpuInfo.max}GHz</p>
-				</div>
-				<div>
-					<h3>Cores</h3>
-					<p>{cpuInfo.physicalCores}</p>
-				</div>
-				<div>
-					<h3>Threads</h3>
-					<p>{cpuInfo.cores}</p>
-				</div>
-				<div>
-					<h3>Processes</h3>
-					<p>{cpuInfo?.process?.all}</p>
-				</div>
-				<div>
-					<h3>PS Running</h3>
-					<p>{cpuInfo?.process?.running}</p>
-				</div>
-				<div>
-					<h3>PS Blocked</h3>
-					<p>{cpuInfo?.process?.blocked}</p>
-				</div>
-				<div>
-					<h3>PS Sleeping</h3>
-					<p>{cpuInfo?.process?.sleeping}</p>
-				</div>
-				<div>
-					<h3>PS Unknown</h3>
-					<p>{cpuInfo?.process?.unknown}</p>
-				</div>
-			</div>
-			<h2>Top 10 process</h2>
-			<div className="Process-container">
-				<h3>PID</h3>
-				<h3>User</h3>
-				<h3>Name</h3>
-				<h3>CPU%</h3>
-				<h3>Memory%</h3>
-				<h3>Time</h3>
-				<h3>Path</h3>
-				{topProcesses?.map((process, index) => {
-					return <ProcessLine key={index} process={process} />;
-				})}
-			</div>
+			<button onClick={toggleShowProcesses} style={{ backgroundColor: showProcesses ? "#a4443d" : "#2aab6b" }}>
+				{showProcesses ? "Hide" : "Show"} advenced cpu infos
+			</button>
+			{showProcesses && (
+				<>
+					<h2>Cpu info {cpuInfo?.manufacturer + " " + cpuInfo?.brand}</h2>
+					<div className="Cpu-info-container">
+						<div>
+							<h3>Frequency avg</h3>
+							<p>{cpuInfo?.avg}GHz</p>
+						</div>
+						<div>
+							<h3>Frequency min</h3>
+							<p>{cpuInfo?.min}GHz</p>
+						</div>
+						<div>
+							<h3>Frequency max</h3>
+							<p>{cpuInfo?.max}GHz</p>
+						</div>
+						<div>
+							<h3>Cores</h3>
+							<p>{cpuInfo?.physicalCores}</p>
+						</div>
+						<div>
+							<h3>Threads</h3>
+							<p>{cpuInfo?.cores}</p>
+						</div>
+						<div>
+							<h3>Processes</h3>
+							<p>{cpuInfo?.process?.all}</p>
+						</div>
+						<div>
+							<h3>PS Running</h3>
+							<p>{cpuInfo?.process?.running}</p>
+						</div>
+						<div>
+							<h3>PS Blocked</h3>
+							<p>{cpuInfo?.process?.blocked}</p>
+						</div>
+						<div>
+							<h3>PS Sleeping</h3>
+							<p>{cpuInfo?.process?.sleeping}</p>
+						</div>
+						<div>
+							<h3>PS Unknown</h3>
+							<p>{cpuInfo?.process?.unknown}</p>
+						</div>
+					</div>
+					<h2>Top 10 process</h2>
+					<div className="Process-container">
+						<h3>PID</h3>
+						<h3>User</h3>
+						<h3>Name</h3>
+						<h3>CPU</h3>
+						<h3>Memory</h3>
+						<h3>Time</h3>
+						<h3>Path</h3>
+						{topProcesses?.map((process, index) => {
+							return <ProcessLine key={index} process={process} />;
+						})}
+					</div>
+				</>
+			)}
 		</Card>
 	);
 };

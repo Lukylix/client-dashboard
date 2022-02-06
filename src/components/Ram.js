@@ -27,8 +27,10 @@ const Ram = ({ socket }) => {
 					<p>{getReadableSize(ramInfo?.total)}</p>
 				</div>
 			</div>
-			<p style={{ textAlign: "center" }}>{`${((ramInfo.active / ramInfo.total) * 100).toFixed(2)} %`}</p>
 			<ProgressBar rounded percent={((ramInfo.active / ramInfo.total) * 100).toFixed(2)} />
+			<p style={{ textAlign: "center", marginTop: "15px" }}>{`${((ramInfo.active / ramInfo.total) * 100).toFixed(
+				2
+			)} %`}</p>
 		</Card>
 	);
 };

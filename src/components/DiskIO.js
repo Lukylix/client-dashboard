@@ -1,10 +1,4 @@
-import Card from "./Card";
-import "./Disk.scss";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import ProgressBar from "./ProgressBar";
-import { getReadableSize } from "../utils/convertion";
-
 import {
 	Chart as ChartJS,
 	CategoryScale,
@@ -46,26 +40,10 @@ export const options = {
 	},
 };
 
-const DiskLine = ({ disk }) => {
-	return (
-		<>
-			<p>{disk.mount}</p>
-			<p>{getReadableSize(disk.used)}</p>
-			<p>{getReadableSize(disk.size - disk.used)}</p>
-			<p>{getReadableSize(disk.size)}</p>
-			<ProgressBar rounded height={"15px"} percent={disk.use} />
-		</>
-	);
-};
-
-const Disk = ({ socket }) => {
-	const [disks, setDisks] = useState([]);
+const DiskIO = ({ socket }) => {
 	const [diskIOData, setdiskIOData] = useState({ rIO_sec: [], wIO_sec: [] });
 
 	useEffect(() => {
-		axios.get("http://localhost:8080/disks").then((res) => {
-			setDisks(res.data);
-		});
 		socket.on("diskIO", (data) => {
 			setdiskIOData((currentData) => {
 				if (currentData?.rIO_sec.length > 29) currentData.rIO_sec.shift();
@@ -100,20 +78,6 @@ const Disk = ({ socket }) => {
 		],
 	};
 
-	return (
-		<Card title="Disk info">
-			<div className="Disk-container">
-				<h3>Mount</h3>
-				<h3>Used</h3>
-				<h3>Free</h3>
-				<h3>Total</h3>
-				{disks.map((disk, index) => (
-					<DiskLine key={index} disk={disk} />
-				))}
-			</div>
-			<Line options={options} data={lineData} />
-		</Card>
-	);
+	return <Line options={options} data={lineData} />;
 };
-
-export default Disk;
+export default DiskIO;

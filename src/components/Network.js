@@ -33,14 +33,14 @@ export const options = {
 	},
 	plugins: {
 		legend: {
-			display: false,
+			display: true,
 		},
 		filler: {
 			propagate: true,
 		},
 		title: {
 			display: true,
-			text: "CPU usage Line Chart",
+			text: "Network usage",
 		},
 	},
 };

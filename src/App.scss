@@ -1,7 +1,24 @@
 @import "./scss/utlis/";
+
 .App {
 	display: grid;
 	grid-template: auto / 2fr 1fr;
+}
+
+.App > * {
+	padding: 10px;
+	overflow-x: auto;
+}
+
+button {
+	background-color: #2aab6b;
+	display: block;
+	border: none;
+	// border-radius: 10px;
+	margin: 20px auto 0 auto;
+	color: inherit;
+	line-height: normal;
+	padding: 15px;
 }
 
 @media screen and (max-width: 1024px) {

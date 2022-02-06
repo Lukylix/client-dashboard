@@ -20,7 +20,7 @@ const App = () => {
 				</div>
 				<div className="Right">
 					<Ram socket={socket} />
-					<Disk />
+					<Disk socket={socket} />
 					<Network socket={socket} />
 				</div>
 			</div>
