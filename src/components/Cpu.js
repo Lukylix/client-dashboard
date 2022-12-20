@@ -77,7 +77,7 @@ const ProcessLine = ({ process }) => {
 			<p>{process.user}</p>
 			<p>{process.name}</p>
 			<p>{process.cpu.toFixed(2)}%</p>
-			<p>{process.mem}%</p>
+			<p>{process.mem.toFixed(2)}%</p>
 			<p>{elapsedTime}</p>
 			<p>{process.path}</p>
 		</>

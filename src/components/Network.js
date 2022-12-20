@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import Card from "./Card";
 import {
 	Chart as ChartJS,
@@ -47,14 +48,27 @@ export const options = {
 
 const Network = ({ socket }) => {
 	const [networkData, setNetworkData] = useState({ rx_sec: [], tx_sec: [] });
+	const [isWsl, setIsWsl] = useState(false);
 
 	useEffect(() => {
-		socket.on("network", (data) => {
+		axios.get("http://localhost:8080/iswsl").then((res) => {
+			setIsWsl(res?.data?.isWsl);
+		});
+
+		socket.on("network", (data = []) => {
 			setNetworkData((currentData) => {
+				let totalRxSec = 0;
+				let totalTxSec = 0;
+
+				data.forEach((netInterface) => {
+					totalRxSec += netInterface.rx_sec;
+					totalTxSec += netInterface.tx_sec;
+				});
+
 				if (currentData?.rx_sec.length > 29) currentData.rx_sec.shift();
-				currentData.rx_sec.push(data[0].rx_sec);
+				currentData.rx_sec.push(totalRxSec);
 				if (currentData?.tx_sec.length > 29) currentData.tx_sec.shift();
-				currentData.tx_sec.push(data[0].tx_sec);
+				currentData.tx_sec.push(totalTxSec);
 				return { ...currentData };
 			});
 		});
@@ -85,7 +99,7 @@ const Network = ({ socket }) => {
 
 	return (
 		<Card title="Network">
-			<Line options={options} data={lineData} />
+			{isWsl ? <h3>Wsl incompatible with network stats</h3> : <Line options={options} data={lineData} />}
 		</Card>
 	);
 };
