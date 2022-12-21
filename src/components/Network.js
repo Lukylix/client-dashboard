@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Card from "./Card";
 import {
 	Chart as ChartJS,
@@ -46,15 +45,10 @@ export const options = {
 	},
 };
 
-const Network = ({ socket }) => {
+const Network = ({ socket, isWsl }) => {
 	const [networkData, setNetworkData] = useState({ rx_sec: [], tx_sec: [] });
-	const [isWsl, setIsWsl] = useState(false);
 
 	useEffect(() => {
-		axios.get("http://localhost:8080/iswsl").then((res) => {
-			setIsWsl(res?.data?.isWsl);
-		});
-
 		socket.on("network", (data = []) => {
 			setNetworkData((currentData) => {
 				let totalRxSec = 0;
@@ -99,7 +93,7 @@ const Network = ({ socket }) => {
 
 	return (
 		<Card title="Network">
-			{isWsl ? <h3>Wsl incompatible with network stats</h3> : <Line options={options} data={lineData} />}
+			{isWsl ? <h3>Wsl is incompatible with network stats.</h3> : <Line options={options} data={lineData} />}
 		</Card>
 	);
 };

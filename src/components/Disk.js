@@ -18,6 +18,8 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
+const host = process.env.REACT_APP_API_HOST || "http://localhost:8080";
+
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 export const options = {
@@ -58,12 +60,12 @@ const DiskLine = ({ disk }) => {
 	);
 };
 
-const Disk = ({ socket }) => {
+const Disk = ({ socket, isWsl, isDocker }) => {
 	const [disks, setDisks] = useState([]);
 	const [diskIOData, setdiskIOData] = useState({ rIO_sec: [], wIO_sec: [] });
 
 	useEffect(() => {
-		axios.get("http://localhost:8080/disks").then((res) => {
+		axios.get(`${host}/disks`).then((res) => {
 			setDisks(res.data);
 		});
 		socket.on("diskIO", (data) => {
@@ -111,7 +113,7 @@ const Disk = ({ socket }) => {
 					<DiskLine key={index} disk={disk} />
 				))}
 			</div>
-			<Line options={options} data={lineData} />
+			{!(isWsl || isDocker) && <Line options={options} data={lineData} />}
 		</Card>
 	);
 };
