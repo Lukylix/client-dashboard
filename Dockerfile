@@ -8,6 +8,7 @@ COPY . .
 RUN npm run build
 
 FROM nginx:alpine
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 WORKDIR /usr/share/nginx/html
 # Get the previously build files
 COPY --from=0 /app/build .
