@@ -11,4 +11,8 @@
 		grid-column: 1 / -1;
 		margin-bottom: 20px;
 	}
+  p{
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }

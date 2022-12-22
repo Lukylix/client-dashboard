@@ -36,3 +36,15 @@
 		white-space: nowrap;
 	}
 }
+
+@media (max-width: 768px) {
+  .Cpu-info-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 375px) {
+  .Cpu-info-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
